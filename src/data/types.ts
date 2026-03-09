@@ -52,6 +52,7 @@ export interface Callout {
   title: string;
   body: string;
   link?: { label: string; url: string };
+  internalLink?: { label: string; to: string };
 }
 
 export type ContentItem = string | {

@@ -218,8 +218,9 @@ export const callouts: Callout[] = [
     sources: [],
     type: 'critical',
     title: 'Session IDs must be Unix timestamps',
-    body: 'Session IDs must be Unix timestamps in milliseconds since epoch. If your Session ID is -1, 0, or a non-timestamp value, replays will not be captured.',
+    body: 'Session IDs must be Unix timestamps in milliseconds since epoch. If your Session ID is -1, 0, or a non-timestamp value, replays will not be captured. If your pipeline can\'t send timestamps, there are alternative approaches.',
     link: { label: 'Session Replay requirements', url: 'https://www.docs.developers.amplitude.com/session-replay/#required-properties' },
+    internalLink: { label: 'What options do I have?', to: '/session-id-options' },
   },
   {
     steps: ['setup'],
@@ -235,8 +236,9 @@ export const callouts: Callout[] = [
     sources: ['segment'],
     type: 'warning',
     title: 'Segment does not send session IDs by default',
-    body: 'You must generate and persist a session ID yourself (e.g., via a cookie). If you skip this, replays will not stitch to events. As an alternative, enable time-based session definitions in Amplitude project settings, but you will lose the ability to correlate replays to specific events within a session.',
+    body: 'You must generate and persist a session ID yourself (e.g., via a cookie). If you skip this, replays will not stitch to events. There are several ways to handle this depending on your pipeline.',
     link: { label: 'Amplitude session definitions', url: 'https://www.docs.developers.amplitude.com/analytics/apis/lookup-tables-api/' },
+    internalLink: { label: 'What options do I have?', to: '/session-id-options' },
   },
   {
     steps: ['setup'],

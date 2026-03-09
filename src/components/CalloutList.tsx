@@ -19,7 +19,7 @@ export function CalloutList({ callouts }: CalloutListProps) {
         Things to Know
       </h3>
       {sorted.map((c, i) => (
-        <CalloutCard key={i} type={c.type} title={c.title} body={c.body} link={c.link} />
+        <CalloutCard key={i} type={c.type} title={c.title} body={c.body} link={c.link} internalLink={c.internalLink} />
       ))}
     </div>
   );

@@ -8,6 +8,7 @@ import { BeforeYouBeginPage } from './pages/BeforeYouBeginPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { DeletionPage } from './pages/DeletionPage'
 import { ValidationPage } from './pages/ValidationPage'
+import { SessionIdOptionsPage } from './pages/SessionIdOptionsPage'
 
 const router = createBrowserRouter(
   [
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
         { path: 'privacy', element: <PrivacyPage /> },
         { path: 'deletion', element: <DeletionPage /> },
         { path: 'validation', element: <ValidationPage /> },
+        { path: 'session-id-options', element: <SessionIdOptionsPage /> },
       ],
     },
   ],

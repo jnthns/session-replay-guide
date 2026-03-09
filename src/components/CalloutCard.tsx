@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { CalloutType } from '../data/types';
 
 interface CalloutCardProps {
@@ -5,6 +6,7 @@ interface CalloutCardProps {
   title: string;
   body: string;
   link?: { label: string; url: string };
+  internalLink?: { label: string; to: string };
 }
 
 const styles: Record<CalloutType, { bg: string; border: string; icon: string; iconColor: string }> = {
@@ -28,7 +30,7 @@ const styles: Record<CalloutType, { bg: string; border: string; icon: string; ic
   },
 };
 
-export function CalloutCard({ type, title, body, link }: CalloutCardProps) {
+export function CalloutCard({ type, title, body, link, internalLink }: CalloutCardProps) {
   const s = styles[type];
   return (
     <div className={`${s.bg} border-l-4 ${s.border} rounded-r-lg p-4`}>
@@ -37,17 +39,28 @@ export function CalloutCard({ type, title, body, link }: CalloutCardProps) {
         <div className="min-w-0">
           <p className={`text-sm font-semibold ${s.iconColor}`}>{title}</p>
           <p className="mt-1 text-sm text-gray-700 leading-relaxed">{body}</p>
-          {link && (
-            <a
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-amp-indigo hover:underline"
-            >
-              {link.label}
-              <span aria-hidden="true">&rarr;</span>
-            </a>
-          )}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {link && (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-amp-indigo hover:underline"
+              >
+                {link.label}
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
+            {internalLink && (
+              <Link
+                to={internalLink.to}
+                className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-amp-indigo hover:underline"
+              >
+                {internalLink.label}
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>
