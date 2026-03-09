@@ -1,4 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { setOrigination } from './analytics';
 
 const navItems = [
   { to: '/', label: 'Before You Begin', accent: true },
@@ -28,9 +29,9 @@ export default function App() {
             <AmplitudeLogo />
             <div>
               <h1 className="text-2xl font-bold tracking-tight">
-                <Link to="/" className="hover:text-indigo-200 transition-colors">
-                  Session Replay Implementation Guide
-                </Link>
+            <Link to="/" className="hover:text-indigo-200 transition-colors" onClick={() => setOrigination('header title')}>
+              Session Replay Implementation Guide
+            </Link>
               </h1>
               <p className="mt-0.5 text-sm text-indigo-200">
                 Follow each step to set up Amplitude Session Replay for your platform.
@@ -44,6 +45,7 @@ export default function App() {
                 <Link
                   key={to}
                   to={to}
+                  onClick={() => setOrigination(`nav: ${label}`)}
                   className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                     isActive
                       ? accent

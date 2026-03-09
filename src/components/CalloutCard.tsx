@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { CalloutType } from '../data/types';
-import { track } from '../analytics';
+import { track, setOrigination } from '../analytics';
 
 interface CalloutCardProps {
   type: CalloutType;
@@ -62,12 +62,15 @@ export function CalloutCard({ type, title, body, link, internalLink }: CalloutCa
               <Link
                 to={internalLink.to}
                 className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-amp-indigo hover:underline"
-                onClick={() => track('callout_link_clicked', {
-                  callout_title: title,
-                  link_label: internalLink.label,
-                  destination: internalLink.to,
-                  link_type: 'internal',
-                })}
+                onClick={() => {
+                  setOrigination(`callout: ${title}`);
+                  track('callout_link_clicked', {
+                    callout_title: title,
+                    link_label: internalLink.label,
+                    destination: internalLink.to,
+                    link_type: 'internal',
+                  });
+                }}
               >
                 {internalLink.label}
                 <span aria-hidden="true">&rarr;</span>
