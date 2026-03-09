@@ -24,7 +24,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: '/sessionreplayvalidator',
+    basename: '/session-replay-guide',
   },
 )
 
