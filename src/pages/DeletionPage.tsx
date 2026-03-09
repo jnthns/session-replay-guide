@@ -23,7 +23,7 @@ export function DeletionPage() {
             Replay deletion erases user event history, not just replay videos. Make sure masking is configured first.
           </p>
           <Link
-            to="/before-you-begin"
+            to="/"
             className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-sm font-semibold text-red-800 hover:bg-red-200 transition-colors"
           >
             Read Before You Begin

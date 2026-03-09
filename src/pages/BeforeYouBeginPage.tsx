@@ -106,7 +106,7 @@ export function BeforeYouBeginPage() {
           Once you've reviewed masking and the items above, follow the full implementation guide.
         </p>
         <Link
-          to="/"
+          to="/guide"
           className="mt-4 inline-flex items-center gap-1 rounded-lg bg-white/20 px-5 py-2 text-sm font-semibold text-white hover:bg-white/30 transition-colors"
         >
           Go to the Full Guide
