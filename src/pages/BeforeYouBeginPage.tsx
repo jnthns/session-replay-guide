@@ -10,6 +10,21 @@ export function BeforeYouBeginPage() {
         </p>
       </div>
 
+      {/* Session ID / Device ID */}
+      <div className="rounded-2xl border border-amp-border bg-white p-6 shadow-sm">
+        <h3 className="text-sm font-semibold text-amp-blue mb-2">Verify your Session ID and Device ID</h3>
+        <p className="text-sm text-gray-700 leading-relaxed">
+          Session Replay requires a valid <strong className="text-amp-blue">Session ID</strong> (Unix timestamp in milliseconds) and a stable <strong className="text-amp-blue">Device ID</strong> that remain constant for the entire session. If either changes mid-session or is invalid (e.g., -1), replays won't be captured correctly.
+        </p>
+        <Link
+          to="/session-id-options"
+          className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-amp-indigo hover:underline"
+        >
+          What options do I have?
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
+      </div>
+
       {/* Masking — lead with why it matters */}
       <div className="rounded-2xl border border-amp-border bg-white p-6 shadow-sm">
         <h3 className="text-base font-semibold text-amp-blue mb-3">Review your masking settings first</h3>
@@ -65,14 +80,6 @@ export function BeforeYouBeginPage() {
         <h3 className="text-sm font-semibold text-amp-blue mb-2">Start with a low sample rate</h3>
         <p className="text-sm text-gray-700 leading-relaxed">
           Begin with a low sample rate (e.g., 10–25%) and verify that masking looks correct in the Amplitude UI before scaling up. This limits exposure if something is misconfigured and helps you stay within your monthly session quota.
-        </p>
-      </div>
-
-      {/* Session ID / Device ID */}
-      <div className="rounded-2xl border border-amp-border bg-white p-6 shadow-sm">
-        <h3 className="text-sm font-semibold text-amp-blue mb-2">Verify your Session ID and Device ID</h3>
-        <p className="text-sm text-gray-700 leading-relaxed">
-          Session Replay requires a valid <strong className="text-amp-blue">Session ID</strong> (Unix timestamp in milliseconds) and a stable <strong className="text-amp-blue">Device ID</strong> that remain constant for the entire session. If either changes mid-session or is invalid (e.g., -1), replays won't be captured correctly.
         </p>
       </div>
 
