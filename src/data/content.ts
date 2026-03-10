@@ -669,6 +669,10 @@ export const validationContent = {
     heading: 'Mobile Validation',
     steps: [
       {
+        label: 'Enable mobile capture in Session Replay & Heatmaps Settings',
+        detail: 'An admin must enable mobile capture for the project in the Session Replay & Heatmaps Settings. Without this, mobile replays will not be collected regardless of SDK configuration.',
+      },
+      {
         label: 'Check the Ingestion Monitor',
         detail: 'Go to Users & Sessions > Session Replays > Gear Icon > Ingestion Monitor. Confirm replays are being received.',
       },
