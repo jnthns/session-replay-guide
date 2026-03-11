@@ -1,5 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { sessionReplayPlugin } from '@amplitude/plugin-session-replay-browser';
+import { plugin as engagementPlugin } from '@amplitude/engagement-browser';
 import type { Event } from '@amplitude/analytics-core';
 
 const API_KEY = import.meta.env.VITE_AMPLITUDE_API_KEY as string | undefined;
@@ -35,6 +36,7 @@ export function initAnalytics() {
 
   const sessionReplay = sessionReplayPlugin({ sampleRate: 1 });
   amplitude.add(sessionReplay);
+  amplitude.add(engagementPlugin());
   amplitude.add(originationEnrichment());
 
   amplitude.init(API_KEY, {
