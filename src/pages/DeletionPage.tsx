@@ -3,8 +3,9 @@ import { setOrigination } from '../analytics';
 import { privacyContent } from '../data/content';
 import type { ContentItem } from '../data/types';
 
-const deletionSection = privacyContent.sections.find(
-  (s) => s.heading === 'Compliance and Data Retention',
+const complianceGroup = privacyContent.groups.find((g) => g.id === 'compliance');
+const deletionSection = complianceGroup?.sections.find(
+  (s) => s.heading === 'Storage and Retention',
 );
 
 export function DeletionPage() {

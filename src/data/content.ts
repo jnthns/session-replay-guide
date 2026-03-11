@@ -508,77 +508,159 @@ export const samplingContent = {
   ],
 };
 
+export interface PrivacySection {
+  heading: string;
+  body?: string;
+  code?: string;
+  codeLanguage?: string;
+  items?: ContentItem[];
+}
+
+export interface PrivacyGroup {
+  id: string;
+  label: string;
+  description: string;
+  sections: PrivacySection[];
+}
+
 export const privacyContent = {
   title: 'Privacy Controls',
   intro:
-    'Amplitude provides multiple layers of privacy control for Session Replay. Masking happens at capture time — masked data is never sent to Amplitude and cannot be recovered.',
-  sections: [
+    'Amplitude provides multiple layers of privacy control for Session Replay. Masking happens at capture time — masked data is never sent to Amplitude and cannot be recovered. Controls are split between the dashboard (no code required) and the SDK (requires a deploy).',
+  conflictNote:
+    'When SDK and dashboard settings target the same element, the dashboard always wins. If remote configuration is enabled and fails to load, Session Replay stops capturing entirely to prevent accidental PII exposure.',
+  groups: [
     {
-      heading: 'Dashboard Masking Levels',
-      items: [
-        'Conservative: All text and inputs are masked by default.',
-        'Medium: Inputs are masked; other text is visible.',
-        'Light: Only inputs are masked.',
+      id: 'admin',
+      label: 'Admin / Dashboard Controls',
+      description: 'Managed by project Admins in the Amplitude UI — no code changes or deploys required. Changes take effect within minutes.',
+      sections: [
         {
-          text: 'Configure in your project\'s Session Replay settings.',
-          link: { label: 'Privacy settings docs', url: 'https://amplitude.com/docs/session-replay/manage-privacy-settings-for-session-replay' },
+          heading: 'Masking Levels',
+          items: [
+            'Conservative: All text and form fields are masked. Recommended for financial services, healthcare, and other sensitive industries.',
+            'Medium (default): All form fields and text inputs are masked; other text is captured as-is.',
+            'Light: Only a subset of sensitive inputs (passwords, credit card numbers, phone numbers, email addresses) are masked.',
+            {
+              text: 'Set per-project in Settings > Organization Settings > Session Replay Settings.',
+              link: { label: 'Privacy settings docs', url: 'https://amplitude.com/docs/session-replay/manage-privacy-settings-for-session-replay' },
+            },
+          ] as ContentItem[],
         },
-      ] as ContentItem[],
+        {
+          heading: 'Remote Masking Overrides',
+          body: 'Admins can override the preset masking level for individual elements using CSS selectors directly in the dashboard — no code changes needed. Overrides support mask, unmask, and exclude actions.',
+          items: [
+            'Right-click any element in your app, use Inspect mode, and copy its CSS selector.',
+            'In Session Replay Settings > Masking Overrides, add the selector and choose mask, unmask, or exclude.',
+            'Unmasking an element also unmasks its children. Re-mask children individually if needed.',
+            'Excluding an element replaces it (and its children) with a same-size placeholder.',
+            {
+              text: 'Dashboard overrides always take precedence over SDK-defined privacy settings.',
+              link: { label: 'How conflicts are resolved', url: 'https://amplitude.com/docs/session-replay/manage-privacy-settings-for-session-replay#how-session-replay-resolves-conflicts-between-the-sdk-and-the-ui' },
+            },
+          ] as ContentItem[],
+        },
+        {
+          heading: 'Remote Sample Rate',
+          items: [
+            {
+              text: 'The sample rate set in Session Replay Settings overrides whatever rate is set in SDK code.',
+              link: { label: 'Session Replay settings', url: 'https://amplitude.com/docs/session-replay#sample-rate' },
+            },
+            'Changes propagate within a few minutes.',
+            'Useful for quickly reducing capture volume without a deploy.',
+          ] as ContentItem[],
+        },
+      ],
     },
     {
-      heading: 'CSS Class-Based Controls',
-      items: [
-        'amp-mask: Add to non-input elements to mask their text content (converts to asterisks). Children are also masked.',
-        'amp-unmask: Add to input elements to unmask them (inputs are masked by default).',
-        'amp-block: Add to non-text elements (e.g., div containers) to replace them with a placeholder of the same dimensions.',
+      id: 'developer',
+      label: 'Developer / SDK Controls',
+      description: 'Configured in code during SDK or plugin initialization. Requires a code change and deploy to update.',
+      sections: [
         {
-          text: 'See the full list of CSS privacy classes and examples.',
-          link: { label: 'SR privacy controls reference', url: 'https://amplitude.com/docs/session-replay/manage-privacy-settings-for-session-replay#css-class-based-controls' },
-        },
-      ] as ContentItem[],
-    },
-    {
-      heading: 'CSS Selector Blocking',
-      body: 'Use the privacyConfig option to block elements by CSS selector:',
-      code: `sessionReplay.init(AMPLITUDE_API_KEY, {
-  sampleRate: 0.01,
+          heading: 'privacyConfig Option',
+          body: 'The privacyConfig object gives developers fine-grained control over masking at init time. All sub-options accept arrays of CSS selectors.',
+          code: `sessionReplay.init(AMPLITUDE_API_KEY, {
+  sampleRate: 0.5,
   privacyConfig: {
-    blockSelector: ['.sensitive-class', '#payment-form']
+    defaultMaskLevel: 'medium',          // 'conservative' | 'medium' | 'light'
+    blockSelector: ['.no-track', '#ads'],        // replace with same-size placeholder
+    maskSelector: ['.sensitive-data', '.user-email'],  // text → asterisks
+    unmaskSelector: ['.public-info', '#main-content'], // override default masking
   }
 });`,
+          items: [
+            'defaultMaskLevel: Sets the baseline masking level in code. Dashboard setting overrides this if set.',
+            'blockSelector: Matched elements (and children) are replaced with a same-size placeholder — content is never captured.',
+            'maskSelector: Matched element text is converted to asterisks. Children are also masked.',
+            'unmaskSelector: Matched elements are excluded from masking, even if they would normally be masked by the default level.',
+            {
+              text: 'Data attributes like data-amp-mask are useful if your class names change due to CSS hashing.',
+              link: { label: 'Full privacyConfig reference', url: 'https://amplitude.com/docs/session-replay/session-replay-plugin#mask-on-screen-data' },
+            },
+          ] as ContentItem[],
+        },
+        {
+          heading: 'CSS Class-Based Controls',
+          body: 'For quick element-level overrides directly in your markup:',
+          items: [
+            'amp-mask: Add to non-input elements to mask their text content (converts to asterisks). Children are also masked.',
+            'amp-unmask: Add to input elements to unmask them (inputs are masked by default at Medium level and above).',
+            'amp-block: Replace a non-text element (e.g., a div, image, or video container) with a same-size placeholder.',
+            {
+              text: 'If masking many elements causes performance issues, prefer amp-block over amp-mask.',
+              link: { label: 'CSS class reference', url: 'https://amplitude.com/docs/session-replay/manage-privacy-settings-for-session-replay#avoid-site-performance-issues-with-masking' },
+            },
+          ] as ContentItem[],
+        },
+        {
+          heading: 'Page-Level and Feature Flag Control',
+          items: [
+            'To exclude specific pages, call amplitude.remove(\'@amplitude/plugin-session-replay-browser\') or sessionReplay.shutdown() on those pages.',
+            {
+              text: 'Use Amplitude Experiment feature flags to enable/disable SR per user segment.',
+              link: { label: 'Amplitude Experiment docs', url: 'https://amplitude.com/docs/feature-experiment' },
+            },
+            'Flag evaluation must happen immediately on app launch — if SR initializes before the flag resolves, some frames may be captured.',
+          ] as ContentItem[],
+        },
+      ],
     },
     {
-      heading: 'Compliance and Data Retention',
-      items: [
+      id: 'compliance',
+      label: 'Compliance & Data Deletion',
+      description: 'How replay data is stored, retained, and deleted.',
+      sections: [
         {
-          text: 'User Privacy API: Deletion requests delete all session replays for selected users.',
-          link: { label: 'User Privacy API docs', url: 'https://amplitude.com/docs/apis/analytics/user-privacy' },
+          heading: 'Storage and Retention',
+          items: [
+            'Session Replay does not use cookies. Replay data is stored client-side in IndexedDB and aggressively cleaned up.',
+            'Default replay data retention is 30–90 days (configurable by plan, max 12 months).',
+            {
+              text: 'Replay data is permanently deleted when a project is deleted.',
+              link: { label: 'Cookie management docs', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-sdk-2#cookie-management' },
+            },
+          ] as ContentItem[],
         },
         {
-          text: 'DSAR API: Deletes event and property history by time range.',
-          link: { label: 'DSAR API docs', url: 'https://amplitude.com/docs/apis/analytics/ccpa-dsar' },
+          heading: 'Deletion APIs',
+          body: 'Deleting replays means deleting the associated events — there is no way to delete just the replay recording while keeping events. Get masking right up front to avoid this.',
+          items: [
+            {
+              text: 'User Privacy API: Deletes all session replays and events for selected users.',
+              link: { label: 'User Privacy API docs', url: 'https://amplitude.com/docs/apis/analytics/user-privacy' },
+            },
+            {
+              text: 'DSAR API: Deletes event and property history by time range.',
+              link: { label: 'DSAR API docs', url: 'https://amplitude.com/docs/apis/analytics/ccpa-dsar' },
+            },
+          ] as ContentItem[],
         },
-        'Default replay data retention is 30-90 days (configurable by plan, max 12 months).',
-        'Session Replay data is deleted on project deletion.',
-        {
-          text: 'SR does not use cookies — data is stored in IndexedDB and aggressively cleaned up.',
-          link: { label: 'Cookie management docs', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-sdk-2#cookie-management' },
-        },
-      ] as ContentItem[],
+      ],
     },
-    {
-      heading: 'Controlling Replay with Feature Flags',
-      items: [
-        {
-          text: 'Create a feature flag targeting control/treatment variants.',
-          link: { label: 'Amplitude Experiment docs', url: 'https://amplitude.com/docs/feature-experiment' },
-        },
-        'For treatment users, disable the plugin or SDK (e.g., amplitude.remove() or sessionReplay.shutdown()).',
-        'Flag evaluation must happen immediately on app launch to prevent replays accurately.',
-        'Alternatively, disable the plugin/SDK on specific pages that should always be restricted.',
-      ] as ContentItem[],
-    },
-  ],
+  ] as PrivacyGroup[],
 };
 
 export interface ValidationStep {
