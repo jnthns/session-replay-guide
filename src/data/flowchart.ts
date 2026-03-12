@@ -24,6 +24,14 @@ export const platforms: PlatformOption[] = [
 ];
 
 export const sources: SourceOption[] = [
+  // Unified SDK (Web + iOS)
+  {
+    id: 'amplitude-unified-sdk',
+    label: 'Amplitude Unified SDK',
+    description: 'Single package for Analytics, Session Replay, Experiment, and Guides & Surveys',
+    platforms: ['web', 'ios'],
+    recommended: true,
+  },
   // Web sources
   {
     id: 'amplitude-browser-sdk',
@@ -115,6 +123,8 @@ export const sources: SourceOption[] = [
 ];
 
 export const methodMap: Record<string, ImplementationMethod> = {
+  'web:amplitude-unified-sdk': 'unified-web',
+  'ios:amplitude-unified-sdk': 'unified-ios',
   'web:amplitude-browser-sdk': 'browser-plugin',
   'web:maintenance-js-sdk': 'standalone-sr-sdk-legacy',
   'web:gtm': 'gtm-plugin',
@@ -132,11 +142,25 @@ export const methodMap: Record<string, ImplementationMethod> = {
 };
 
 export const methods: Record<ImplementationMethod, MethodInfo> = {
+  'unified-web': {
+    id: 'unified-web',
+    label: 'Unified SDK (Web)',
+    description:
+      'The recommended approach for new Web implementations. A single @amplitude/unified package bundles Analytics, Session Replay, Experiment, and Guides & Surveys — no separate plugins required. One install, one init call.',
+    docsUrl: 'https://amplitude.com/docs/sdks/analytics/browser/browser-unified-sdk',
+  },
+  'unified-ios': {
+    id: 'unified-ios',
+    label: 'Unified SDK (iOS)',
+    description:
+      'The recommended approach for new iOS implementations. The AmplitudeUnified package bundles Analytics, Session Replay, and Experiment — no separate plugins required. One import, one init call.',
+    docsUrl: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk',
+  },
   'browser-plugin': {
     id: 'browser-plugin',
     label: 'Session Replay Plugin',
     description:
-      'The recommended approach for Browser SDK users. The plugin attaches to your existing Amplitude instance and handles replay capture, session ID management, and property forwarding automatically.',
+      'For existing Browser SDK v2 users. The plugin attaches to your existing Amplitude instance and handles replay capture, session ID management, and property forwarding automatically.',
     docsUrl: 'https://amplitude.com/docs/session-replay/session-replay-plugin',
   },
   'standalone-sr-sdk': {

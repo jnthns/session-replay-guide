@@ -1,6 +1,7 @@
 export type Platform = 'web' | 'ios' | 'android' | 'react-native';
 
 export type AnalyticsSource =
+  | 'amplitude-unified-sdk'
   | 'amplitude-browser-sdk'
   | 'maintenance-js-sdk'
   | 'gtm'
@@ -17,6 +18,8 @@ export type AnalyticsSource =
   | 'segment-rn';
 
 export type ImplementationMethod =
+  | 'unified-web'
+  | 'unified-ios'
   | 'browser-plugin'
   | 'standalone-sr-sdk'
   | 'standalone-sr-sdk-segment'
@@ -71,6 +74,7 @@ export interface SourceOption {
   label: string;
   description: string;
   platforms: Platform[];
+  recommended?: boolean;
 }
 
 export interface MethodInfo {

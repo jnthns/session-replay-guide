@@ -1,6 +1,100 @@
 import type { ImplementationMethod, SetupContent, ContentItem } from './types';
 
 export const setupContent: Record<ImplementationMethod, SetupContent> = {
+  'unified-web': {
+    installCommands: [
+      'npm install @amplitude/unified',
+    ],
+    language: 'javascript',
+    codeSnippet: `import { initAll, track, identify, sessionReplay } from '@amplitude/unified';
+
+// Single call initializes Analytics, Session Replay, Experiment,
+// and Guides & Surveys — no separate plugins needed.
+initAll('YOUR_API_KEY', {
+  // Analytics options
+  analytics: {
+    autocapture: true,
+  },
+
+  // Session Replay options
+  sessionReplay: {
+    sampleRate: 0.5, // 50% of sessions — adjust as needed
+  },
+
+  // Experiment options (optional)
+  experiment: {
+    // deploymentKey: 'YOUR_DEPLOYMENT_KEY',
+  },
+
+  // Guides & Surveys options (optional)
+  engagement: {
+    serverZone: 'US',
+  },
+});
+
+// Track events — same API as the Browser SDK
+track('Button Clicked', { buttonName: 'Sign Up' });`,
+    notes: [
+      {
+        text: 'The Unified SDK replaces @amplitude/analytics-browser, @amplitude/plugin-session-replay-browser, and @amplitude/engagement-browser with a single package.',
+        link: { label: 'Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-unified-sdk' },
+      },
+      'One initAll() call handles everything — no need to call amplitude.add() for plugins.',
+      {
+        text: 'All Session Replay Plugin configuration options are supported under the sessionReplay key.',
+        link: { label: 'Session Replay config options', url: 'https://amplitude.com/docs/session-replay/session-replay-plugin#configuration' },
+      },
+      {
+        text: 'If you only need specific products and are concerned about bundle size, you can install individual packages instead.',
+        link: { label: 'Individual product installation', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-unified-sdk#individual-product-installation' },
+      },
+    ],
+  },
+
+  'unified-ios': {
+    installCommands: [
+      '// Swift Package Manager\nhttps://github.com/amplitude/AmplitudeUnified-Swift',
+      '// CocoaPods\npod \'AmplitudeUnified\', \'~> 0.0.0\'',
+    ],
+    language: 'swift',
+    codeSnippet: `import AmplitudeUnified
+
+// Single call initializes Analytics, Session Replay, and Experiment.
+let amplitude = Amplitude(
+    apiKey: "YOUR_API_KEY",
+    sessionReplayConfig: SessionReplayPlugin.Config(
+        sessionSampleRate: 100  // capture all sessions — adjust as needed
+    )
+)
+
+// Track events — same API as the iOS Swift SDK
+amplitude.track(
+    eventType: "Button Tapped",
+    eventProperties: ["button_id": "sign_up"]
+)
+
+// Session Replay is automatically recording — no manual start needed.
+// You can control recording if needed:
+// amplitude.sessionReplay?.pauseRecording()
+// amplitude.sessionReplay?.resumeRecording()`,
+    notes: [
+      {
+        text: 'The Unified SDK replaces AmplitudeSwift + AmplitudeSwiftSessionReplayPlugin with a single package.',
+        link: { label: 'iOS Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk' },
+      },
+      'Session Replay initializes automatically — no need to call amplitude.add(plugin:).',
+      'Session Replay is only available on iOS platforms, not on macOS, tvOS, watchOS, or visionOS.',
+      {
+        text: 'Identity is automatically synchronized across Analytics, Session Replay, and Experiment.',
+        link: { label: 'Identity management', url: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk#identity-management' },
+      },
+      {
+        text: 'If migrating from individual SDKs, remove the separate dependencies (AmplitudeSwift, AmplitudeSessionReplay) after adding AmplitudeUnified.',
+        link: { label: 'Migration guide', url: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk#migration-guide' },
+      },
+    ],
+  },
+
   'browser-plugin': {
     installCommands: [
       'npm install @amplitude/plugin-session-replay-browser --save',

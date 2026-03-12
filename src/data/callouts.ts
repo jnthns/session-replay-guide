@@ -70,6 +70,45 @@ export const callouts: Callout[] = [
     link: { label: 'React Native SR limitations', url: 'https://amplitude.com/docs/session-replay/session-replay-react-native-sdk-plugin#known-limitations' },
   },
 
+  // ─── Unified SDK callouts ─────────────────────────────────────────────────────────
+
+  {
+    steps: ['source', 'method'],
+    platforms: ['web'],
+    sources: ['amplitude-unified-sdk'],
+    type: 'tip',
+    title: 'One package replaces three',
+    body: 'The Unified SDK (@amplitude/unified) bundles Analytics, Session Replay, Experiment, and Guides & Surveys. No separate plugin installs needed — just one npm package and one initAll() call.',
+    link: { label: 'Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-unified-sdk' },
+  },
+  {
+    steps: ['source', 'method'],
+    platforms: ['ios'],
+    sources: ['amplitude-unified-sdk'],
+    type: 'tip',
+    title: 'One package replaces three',
+    body: 'The Unified SDK (AmplitudeUnified) bundles Analytics, Session Replay, and Experiment. No separate plugin installs — one import, one init call. Identity syncs automatically across all products.',
+    link: { label: 'iOS Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk' },
+  },
+  {
+    steps: ['source'],
+    platforms: ['web'],
+    sources: ['amplitude-browser-sdk'],
+    type: 'tip',
+    title: 'Consider the Unified SDK instead',
+    body: 'If you\'re starting fresh, the Unified SDK (@amplitude/unified) bundles Session Replay with Analytics, Experiment, and Guides & Surveys in a single package — no separate plugin required. It\'s the recommended path for new Web implementations.',
+    link: { label: 'Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/browser/browser-unified-sdk' },
+  },
+  {
+    steps: ['source'],
+    platforms: ['ios'],
+    sources: ['amplitude-swift-sdk'],
+    type: 'tip',
+    title: 'Consider the Unified SDK instead',
+    body: 'If you\'re starting fresh, the Unified SDK (AmplitudeUnified) bundles Session Replay with Analytics and Experiment in a single package. It\'s the recommended path for new iOS implementations.',
+    link: { label: 'iOS Unified SDK docs', url: 'https://amplitude.com/docs/sdks/analytics/ios/unified-sdk' },
+  },
+
   // ─── Step 2: Source-specific callouts ─────────────────────────────────────────────
 
   {

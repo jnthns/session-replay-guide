@@ -23,6 +23,7 @@ export function StepSource({ platform, selected, onSelect }: StepSourceProps) {
             label={s.label}
             description={s.description}
             selected={selected === s.id}
+            recommended={s.recommended}
             onClick={() => onSelect(s.id)}
           />
         ))}
