@@ -13,6 +13,7 @@ interface Approach {
   persona: string;
   loe: string;
   benefit: string;
+  tradeoff: string;
   controls: string[];
 }
 
@@ -29,6 +30,7 @@ const approaches: Approach[] = [
     persona: 'Project Admin, Privacy/Compliance lead, Product Manager — anyone with Admin access in Amplitude.',
     loe: 'Minutes. No code, no deploy, no engineering sprint. Changes propagate within minutes.',
     benefit: 'Fast iteration on masking rules without waiting on engineering. Overrides SDK settings, so compliance teams keep final say.',
+    tradeoff: 'The three preset levels are broad — they can be too aggressive (masking everything, making replays hard to use) or too lenient (leaving PII exposed). CSS selector overrides help, but for large enterprise apps with hundreds of views and dynamic content, managing overrides one-by-one through the dashboard alone often isn\'t practical or comprehensive enough.',
     controls: [
       'Three preset masking levels (Conservative, Medium, Light)',
       'Per-element CSS selector overrides (mask, unmask, exclude)',
@@ -47,6 +49,7 @@ const approaches: Approach[] = [
     persona: 'Front-end / mobile engineer who owns the Amplitude SDK integration.',
     loe: 'Requires a code change and deploy. Plan for a PR review cycle. Updates only take effect after the next release.',
     benefit: 'Fine-grained, programmatic control baked into the codebase. Ideal for dynamic UIs, hashed class names, and CI-enforced privacy policies.',
+    tradeoff: 'Requires engineering and product coordination to audit every view, tag sensitive elements, and test masking across the entire app. This can be very tedious and time-consuming — especially for large codebases with many teams. Every new feature or UI change needs masking reviewed, and missed elements won\'t be caught until replays are already recorded.',
     controls: [
       'privacyConfig — defaultMaskLevel, blockSelector, maskSelector, unmaskSelector',
       'CSS classes — amp-mask, amp-unmask, amp-block in markup',
@@ -109,6 +112,11 @@ function ELI5Panel() {
                   <p className="text-sm text-gray-700">{a.benefit}</p>
                 </div>
 
+                <div className="rounded-md bg-amber-50 border border-amber-200 px-3 py-2">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-600 mb-0.5">Watch out</p>
+                  <p className="text-xs text-amber-800 leading-relaxed">{a.tradeoff}</p>
+                </div>
+
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-1">What you control</p>
                   <ul className="space-y-1">
@@ -125,7 +133,7 @@ function ELI5Panel() {
           </div>
 
           <p className="text-xs text-gray-500 italic">
-            Dashboard settings always override SDK settings when they conflict. Use the dashboard for quick, org-wide policy; use the SDK for precise, code-level control.
+            Neither approach is sufficient on its own for most teams. The dashboard gives you fast, broad coverage and compliance oversight, while the SDK gives you the precision that large or dynamic apps need. Dashboard settings always override SDK settings when they conflict — so even if engineering misses something, compliance can catch it without a deploy.
           </p>
         </div>
       )}
